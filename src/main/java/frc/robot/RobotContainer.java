@@ -13,10 +13,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.*;
-
+import frc.robot.RobotConstants.ElevatorConstants.ReefTarget;
 import frc.robot.auto.basics.AutoActions;
+import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.ElevatorSetExtenstionCommand;
+import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.display.Display;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.AprilTagVisionIONorthstar;
 import frc.robot.subsystems.swerve.Swerve;
@@ -38,6 +42,8 @@ import java.util.function.*;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+        
     @Getter
     private final UpdateManager updateManager;
 
@@ -51,6 +57,8 @@ public class RobotContainer {
     CommandXboxController operatorController = new CommandXboxController(1);
     Display display = Display.getInstance();
     double lastResetTime = 0.0;
+    ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+    private ReefTarget currentTarget = ReefTarget.L1;
 
     // The robot's subsystems and commands are defined here...
 
@@ -108,6 +116,19 @@ public class RobotContainer {
                     }
                     lastResetTime = Timer.getFPGATimestamp();
                 }).ignoringDisable(true));
+        RobotConstants.driverController
+        .rightTrigger()
+        .whileTrue(
+            Commands.parallel(
+                new ElevatorSetExtenstionCommand(()->currentTarget.elevatorHeight, elevatorSubsystem),
+                Commands.waitUntil(() -> elevatorSubsystem.isNearExtension(currentTarget.elevatorHeight))))
+        .onFalse(new ElevatorSetExtenstionCommand(()->0,elevatorSubsystem).until(() -> elevatorSubsystem.isNearExtension(0.0)));
+        RobotConstants.operatorController.a().or(RobotConstants.driverController.a()).onTrue(Commands.runOnce(() -> currentTarget = ReefTarget.L1));
+        RobotConstants.operatorController.x().or(RobotConstants.driverController.x()).onTrue(Commands.runOnce(() -> currentTarget = ReefTarget.L2));
+        RobotConstants.operatorController.b().or(RobotConstants.driverController.b()).onTrue(Commands.runOnce(() -> currentTarget = ReefTarget.L3));
+        RobotConstants.operatorController.y().or(RobotConstants.driverController.y()).onTrue(Commands.runOnce(() -> currentTarget = ReefTarget.L4));
+        RobotConstants.driverController.leftBumper().whileTrue(new ElevatorUpCommand(elevatorSubsystem));
+        RobotConstants.driverController.rightBumper().whileTrue(new ElevatorDownCommand(elevatorSubsystem));
     }
 
     /**

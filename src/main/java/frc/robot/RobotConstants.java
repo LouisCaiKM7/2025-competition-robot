@@ -16,10 +16,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.utils.TunableNumber;
 import org.frcteam6941.swerve.SwerveSetpointGenerator.KinematicLimits;
 
 import static edu.wpi.first.units.Units.*;
+
+import java.io.ObjectInputFilter.Status;
+import java.util.Calendar;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -199,9 +203,9 @@ public final class RobotConstants {
                 .withCouplingGearRatio(COUPLE_RATIO)
                 .withSteerMotorInverted(STEER_MOTOR_REVERSED);
         //Front Left
-        private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 1;
-        private static final int FRONT_LEFT_STEER_MOTOR_ID = 0;
-        private static final int FRONT_LEFT_ENCODER_ID = 2;
+        private static final int FRONT_LEFT_DRIVE_MOTOR_ID = 8;
+        private static final int FRONT_LEFT_STEER_MOTOR_ID = 7;
+        private static final int FRONT_LEFT_ENCODER_ID = 20;
         private static final double FRONT_LEFT_ENCODER_OFFSET = -0.37451171875;// 0.052955;//0.127686//0.5329550781
         private static final Measure<DistanceUnit> frontLeftXPos = Meters.of(0.127);
         private static final Measure<DistanceUnit> frontLeftYPos = Meters.of(0.247);
@@ -214,9 +218,9 @@ public final class RobotConstants {
                 frontLeftYPos.magnitude(),
                 false);
         // Front Right
-        private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 4;
-        private static final int FRONT_RIGHT_STEER_MOTOR_ID = 3;
-        private static final int FRONT_RIGHT_ENCODER_ID = 5;
+        private static final int FRONT_RIGHT_DRIVE_MOTOR_ID = 2;
+        private static final int FRONT_RIGHT_STEER_MOTOR_ID = 1;
+        private static final int FRONT_RIGHT_ENCODER_ID = 0;
         private static final double FRONT_RIGHT_ENCODER_OFFSET = -0.119385;// 0.125685;//0.13623046875//0.117686//0.046875
         private static final Measure<DistanceUnit> frontRightXPos = Meters.of(0.127);
         private static final Measure<DistanceUnit> frontRightYPos = Meters.of(-0.247);
@@ -229,9 +233,9 @@ public final class RobotConstants {
                 frontRightYPos.magnitude(),
                 true);
         // Back Left
-        private static final int BACK_LEFT_DRIVE_MOTOR_ID = 7;
-        private static final int BACK_LEFT_STEER_MOTOR_ID = 6;
-        private static final int BACK_LEFT_ENCODER_ID = 8;
+        private static final int BACK_LEFT_DRIVE_MOTOR_ID = 6;
+        private static final int BACK_LEFT_STEER_MOTOR_ID = 5;
+        private static final int BACK_LEFT_ENCODER_ID = 11;
         private static final double BACK_LEFT_ENCODER_OFFSET = -0.310302734375;// 0.773925;//-0.223//0.401611//0.77392578125
         private static final Measure<DistanceUnit> backLeftXPos = Meters.of(-0.180);
         private static final Measure<DistanceUnit> backLeftYPos = Meters.of(0.247);
@@ -244,9 +248,9 @@ public final class RobotConstants {
                 backLeftYPos.magnitude(),
                 false);
         // Back Right
-        private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 10;
-        private static final int BACK_RIGHT_STEER_MOTOR_ID = 9;
-        private static final int BACK_RIGHT_ENCODER_ID = 11;
+        private static final int BACK_RIGHT_DRIVE_MOTOR_ID = 4;
+        private static final int BACK_RIGHT_STEER_MOTOR_ID = 3;
+        private static final int BACK_RIGHT_ENCODER_ID = 10;
         private static final double BACK_RIGHT_ENCODER_OFFSET = -0.151611;// 0.422119;//-0.5684550781//-0.064453//0.432279296875
         private static final Measure<DistanceUnit> backRightXPos = Meters.of(-0.180);
         private static final Measure<DistanceUnit> backRightYPos = Meters.of(-0.247);
@@ -316,5 +320,40 @@ public final class RobotConstants {
     public static final class ReefAimConstants {
         public static final Transform2d tagLeftToRobot = new Transform2d(); // vec(robot) - vec(tag) when shooting left coral
         public static final Transform2d tagRightToRobot = new Transform2d();
+    }
+
+    public static final class ElevatorConstants {
+        public static final double LEFT_ELEVATOR_MOTOR_ID = 50;
+        public static final double RIGHT_ELEVATOR_MOTOR_ID = 51;
+        public static final double ELEVATOR_GEAR_RATIO = 4.5/1.0;
+        public static final double ELEVATOR_DRUM_RADIUS_METERS = (1.751 / 2.0)*0.0254;
+
+        public static final class ELevatorGainClass {
+            public static final TunableNumber ELEVATOR_KG = new TunableNumber("ELEVATOR PID/kg", 0.03);
+            public static final TunableNumber ELEVATOR_KP = new TunableNumber("ELEVATOR PID/kp", 0);
+            public static final TunableNumber ELEVATOR_KD = new TunableNumber("ELEVATOR PID/kd", 0.0001);
+            public static final TunableNumber ELEVATOR_KA = new TunableNumber("ELEVATOR PID/ka", 0);
+            public static final TunableNumber ELEVATOR_KV = new TunableNumber("ELEVATOR PID/kv", 0.12);
+            public static final TunableNumber ELEVATOR_KS = new TunableNumber("ELEVATOR PID/ks", 0.045);
+                
+        }
+        public static final double MAX_EXTENSION_METERS = 0.0254*(51.8);
+
+        public static final double L2_EXTENSION_METERS = 0.0254*(8.7);
+        public static final double L3_EXTENSION_METERS = 0.0254*(26.0);
+        public static final double L4_EXTENSION_METERS = 0.0254*(50.3);
+        public static enum ReefTarget {
+                L1(0.0),
+                L2(L2_EXTENSION_METERS),
+                L3(L3_EXTENSION_METERS),
+                L4(L4_EXTENSION_METERS);
+
+                public final double elevatorHeight;
+
+                private ReefTarget(double elevatorHeight) {
+                this.elevatorHeight = elevatorHeight;
+                }
+  }
+        
     }
 }
