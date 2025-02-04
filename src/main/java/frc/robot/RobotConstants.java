@@ -343,8 +343,8 @@ public final class RobotConstants {
         public static boolean useSmartDashboardForSkew = false;
         public static boolean useShootOnMove = false;
         public static final boolean leftMotorClockwise = true;
-        public static final double elevatorMotorRPS = 10; // Todo: change the value for this constant and the one below
-        public static final double elevatorMotorAccel = 60; // In rotation * s^{-2}
+        public static final double elevatorMotorRPS = 70; // Todo: change the value for this constant and the one below
+        public static final double elevatorMotorAccel = 300; // In rotation * s^{-2}
 
         /**
          * Constants for the elevator motor gains.
@@ -361,11 +361,11 @@ public final class RobotConstants {
         // Constants for elevator level positions relative to starting position. Todo: tune all constants below
         public static final double[] Position = new double[]{
                 0.0,   //lowest
-                0.0,   //L1
-                8.7,   //L2
-                26.0,  //L3
-                50.3,  //L4
-                51.8   //highest
+                5,   //L1
+                12.5,   //L2
+                21.8,  //L3
+                33,  //L4
+                33   //highest
         };
     }
 }

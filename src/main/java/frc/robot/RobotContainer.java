@@ -18,6 +18,7 @@ import frc.robot.auto.basics.AutoActions;
 import frc.robot.commands.elevator.ElevatorCommand;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.elevator.ElevatorDownCommand;
+import frc.robot.commands.elevator.ElevatorResetCommand;
 import frc.robot.commands.elevator.ElevatorUpCommand;
 import frc.robot.display.Display;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
@@ -144,6 +145,7 @@ public class RobotContainer {
 
         RobotConstants.operatorController.rightTrigger().whileTrue(new ElevatorDownCommand(elevatorSubsystem));
         RobotConstants.operatorController.leftTrigger().whileTrue(new ElevatorUpCommand(elevatorSubsystem));
+        RobotConstants.operatorController.start().onTrue(new ElevatorResetCommand(elevatorSubsystem).ignoringDisable(true));
     }
 
     /**

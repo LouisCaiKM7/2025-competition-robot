@@ -53,6 +53,10 @@ public class ElevatorIOSim implements ElevatorIO {
     }
 
     @Override
+    public void resetElevatorPosition(){
+    }
+
+    @Override
     public boolean isNearExtension(double expected) {
         return true;
     }

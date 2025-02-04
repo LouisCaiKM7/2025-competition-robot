@@ -111,6 +111,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     }
 
     @Override
+    public void resetElevatorPosition(){
+        leftElevatorTalon.setPosition(0.0);
+        rightElevatorTalon.setPosition(0.0);
+    }
+
+    @Override
     public boolean isNearExtension(double expected) {
         return MathUtil.isNear(expected, leftElevatorTalon.getPosition().getValueAsDouble(), 0.02);
     }

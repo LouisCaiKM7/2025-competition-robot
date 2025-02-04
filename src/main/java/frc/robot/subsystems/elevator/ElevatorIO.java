@@ -13,6 +13,8 @@ public interface ElevatorIO {
 
     void setElevatorTarget(double radians);
 
+    void resetElevatorPosition();
+
     double getVelocity();
 
     double getElevatorPosition();
