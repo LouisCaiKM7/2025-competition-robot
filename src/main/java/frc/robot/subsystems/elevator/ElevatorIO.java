@@ -23,8 +23,11 @@ public interface ElevatorIO {
 
     boolean isNearExtension(double expected);
 
+    boolean isCurrentMax(double expected);
+
     @AutoLog
     class ElevatorIOInputs {
+        public Measure<CurrentUnit> leftElevatorCurrent = Amps.zero();
         public Measure<AngularVelocityUnit> leftElevatorVelocity = RadiansPerSecond.zero();
         public Measure<AngleUnit> leftElevatorPosition = Radians.zero();
         public Measure<VoltageUnit> leftElevatorAppliedVoltage = Volts.zero();

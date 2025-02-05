@@ -12,21 +12,17 @@ public class ElevatorZeroingCommand extends Command {
 
     public ElevatorZeroingCommand(ElevatorSubsystem elevator) {
         this.elevator = elevator;
-    }
-
-    @Override
-    public void initialize() {
-
+        addRequirements(elevator);
     }
 
     @Override
     public void execute(){
-        elevator.getIo().setElevatorDirectVoltage(-2);
+        elevator.getIo().setElevatorDirectVoltage(-0.5);
     }
 
     @Override
     public boolean isFinished() {
-        return elevator.getIo().getElevatorCurrent() > RobotConstants.ElevatorConstants.ELEVATOR_ZEROING_CURRENT;
+        return elevator.getIo().isCurrentMax(RobotConstants.ElevatorConstants.ELEVATOR_ZEROING_CURRENT);
     }
 
     @Override
@@ -34,6 +30,4 @@ public class ElevatorZeroingCommand extends Command {
         elevator.getIo().setElevatorDirectVoltage(0);
         elevator.getIo().resetElevatorPosition();
     }
-
-
 }

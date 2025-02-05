@@ -77,4 +77,9 @@ public class ElevatorIOSim implements ElevatorIO {
 
     @Override
     public double getElevatorCurrent() {return leftElevatorTalonSim.getCurrentDrawAmps();}
+
+    @Override
+    public boolean isCurrentMax(double max){
+        return false;
+    }
 }

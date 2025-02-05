@@ -18,4 +18,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Elevator", inputs);
     }
+
+    public double getElevatorCurrent(){
+        return io.getElevatorCurrent();
+    }
 }

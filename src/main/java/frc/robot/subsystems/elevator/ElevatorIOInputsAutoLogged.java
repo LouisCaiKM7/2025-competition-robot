@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 public class ElevatorIOInputsAutoLogged extends ElevatorIO.ElevatorIOInputs implements LoggableInputs, Cloneable {
   @Override
   public void toLog(LogTable table) {
+    table.put("leftElevatorCurrent", leftElevatorCurrent);
     table.put("LeftElevatorVelocity", leftElevatorVelocity);
     table.put("LeftElevatorPosition", leftElevatorPosition);
     table.put("LeftElevatorAppliedVoltage", leftElevatorAppliedVoltage);
@@ -27,6 +28,7 @@ public class ElevatorIOInputsAutoLogged extends ElevatorIO.ElevatorIOInputs impl
 
   @Override
   public void fromLog(LogTable table) {
+    leftElevatorCurrent = table.get("leftElevatorCurrent",leftElevatorCurrent);
     leftElevatorVelocity = table.get("LeftElevatorVelocity", leftElevatorVelocity);
     leftElevatorPosition = table.get("LeftElevatorPosition", leftElevatorPosition);
     leftElevatorAppliedVoltage = table.get("LeftElevatorAppliedVoltage", leftElevatorAppliedVoltage);
@@ -46,6 +48,7 @@ public class ElevatorIOInputsAutoLogged extends ElevatorIO.ElevatorIOInputs impl
 
   public ElevatorIOInputsAutoLogged clone() {
     ElevatorIOInputsAutoLogged copy = new ElevatorIOInputsAutoLogged();
+    copy.leftElevatorCurrent = leftElevatorCurrent;
     copy.leftElevatorVelocity = this.leftElevatorVelocity;
     copy.leftElevatorPosition = this.leftElevatorPosition;
     copy.leftElevatorAppliedVoltage = this.leftElevatorAppliedVoltage;

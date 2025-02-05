@@ -34,6 +34,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private final StatusSignal<Angle> leftElevatorPosition = leftElevatorTalon.getPosition();
     private final StatusSignal<Voltage> leftElevatorAppliedVoltage = leftElevatorTalon.getMotorVoltage();
     private final StatusSignal<Current> leftElevatorSupplyCurrent = leftElevatorTalon.getSupplyCurrent();
+    private final StatusSignal<Current> leftElevatorCurrent = leftElevatorTalon.getStatorCurrent();
     private final StatusSignal<AngularVelocity> rightElevatorVelocity = rightElevatorTalon.getVelocity();
     private final StatusSignal<Angle> rightElevatorPosition = rightElevatorTalon.getPosition();
     private final StatusSignal<Voltage> rightElevatorAppliedVoltage = rightElevatorTalon.getMotorVoltage();
@@ -70,6 +71,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
         BaseStatusSignal.refreshAll(
+                leftElevatorCurrent,
                 leftElevatorVelocity,
                 leftElevatorPosition,
                 leftElevatorAppliedVoltage,
@@ -83,6 +85,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         inputs.leftElevatorPosition = Radians.of(Units.rotationsToRadians(leftElevatorPosition.getValueAsDouble()));
         inputs.leftElevatorAppliedVoltage = Volts.of(leftElevatorAppliedVoltage.getValueAsDouble());
         inputs.leftElevatorSupplyCurrent = Amps.of(leftElevatorSupplyCurrent.getValueAsDouble());
+        inputs.leftElevatorCurrent = Amps.of(leftElevatorCurrent.getValueAsDouble());
 
         inputs.rightElevatorVelocity = RadiansPerSecond.of(Units.rotationsToRadians(rightElevatorVelocity.getValueAsDouble()));
         inputs.rightElevatorPosition = Radians.of(Units.rotationsToRadians(rightElevatorPosition.getValueAsDouble()));
@@ -119,6 +122,11 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     @Override
     public boolean isNearExtension(double expected) {
         return MathUtil.isNear(metersToRotations(expected), leftElevatorTalon.getPosition().getValueAsDouble(), 0.02);
+    }
+
+    @Override
+    public boolean isCurrentMax(double max){
+        return leftElevatorTalon.getStatorCurrent().getValueAsDouble() > max;
     }
 
     @Override

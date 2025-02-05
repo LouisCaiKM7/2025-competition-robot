@@ -146,6 +146,7 @@ public class RobotContainer {
         RobotConstants.operatorController.rightTrigger().whileTrue(new ElevatorDownCommand(elevatorSubsystem));
         RobotConstants.operatorController.leftTrigger().whileTrue(new ElevatorUpCommand(elevatorSubsystem));
         RobotConstants.operatorController.start().onTrue(new ElevatorResetCommand(elevatorSubsystem).ignoringDisable(true));
+        RobotConstants.operatorController.povDown().onTrue(new ElevatorDownCommand(elevatorSubsystem));
     }
 
     /**
