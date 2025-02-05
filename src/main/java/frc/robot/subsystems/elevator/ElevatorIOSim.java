@@ -71,7 +71,10 @@ public class ElevatorIOSim implements ElevatorIO {
     }
 
     @Override
-    public double getVelocity() {
+    public double getElevatorVelocity() {
         return rightElevatorTalonSim.getAngularVelocityRadPerSec() / 6.28 * 60;
     }
+
+    @Override
+    public double getElevatorCurrent() {return leftElevatorTalonSim.getCurrentDrawAmps();}
 }

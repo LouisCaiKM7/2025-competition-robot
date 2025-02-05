@@ -11,17 +11,17 @@ public interface ElevatorIO {
 
     void setElevatorDirectVoltage(double volts);
 
-    void setElevatorTarget(double radians);
+    void setElevatorTarget(double meters);
 
     void resetElevatorPosition();
 
-    double getVelocity();
+    double getElevatorVelocity();
 
     double getElevatorPosition();
 
+    double getElevatorCurrent();
+
     boolean isNearExtension(double expected);
-
-
 
     @AutoLog
     class ElevatorIOInputs {

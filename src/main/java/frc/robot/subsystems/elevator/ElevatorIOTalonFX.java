@@ -106,8 +106,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     }
 
     @Override
-    public void setElevatorTarget(double radians) {
-        leftElevatorTalon.setControl(positionVoltage.withPosition(radians));
+    public void setElevatorTarget(double meters) {
+        leftElevatorTalon.setControl(positionVoltage.withPosition(metersToRotations(meters)));
     }
 
     @Override
@@ -118,17 +118,29 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     @Override
     public boolean isNearExtension(double expected) {
-        return MathUtil.isNear(expected, leftElevatorTalon.getPosition().getValueAsDouble(), 0.02);
+        return MathUtil.isNear(metersToRotations(expected), leftElevatorTalon.getPosition().getValueAsDouble(), 0.02);
     }
 
     @Override
     public double getElevatorPosition() {
-        return leftElevatorTalon.getPosition().getValueAsDouble();
+        return rotationsToMeters(leftElevatorTalon.getPosition().getValueAsDouble());
     }
 
     @Override
-    public double getVelocity() {
+    public double getElevatorVelocity() {
         return leftElevatorVelocity.getValueAsDouble() * 60;
     }
 
+    @Override
+    public double getElevatorCurrent(){
+        return leftElevatorTalon.getStatorCurrent().getValueAsDouble();
+    }
+
+    private double metersToRotations(double heightMeters) {
+        return (heightMeters / (Math.PI * ELEVATOR_SPOOL_DIAMETER)) * ELEVATOR_GEAR_RATIO;
+    }
+
+    private double rotationsToMeters(double rotations) {
+        return rotations * (Math.PI * ELEVATOR_SPOOL_DIAMETER) / ELEVATOR_GEAR_RATIO;
+    }
 }
