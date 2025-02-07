@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.endeffector.EndEffectorSubsystem;
 // import frc.robot.subsystems.intake.IntakerSubsystem;
@@ -16,6 +17,7 @@ public class Superstructure extends SubsystemBase {
     private EndEffectorSubsystem endEffector;
     // private IntakerSubsystem intakerSubsystem;
     private ElevatorSubsystem elevatorSubsystem;
+    private ClimberSubsystem climberSubsystem;
 
     public enum WantedSuperState {
         STOPPED,
@@ -26,7 +28,10 @@ public class Superstructure extends SubsystemBase {
         L1,
         L2,
         L3,
-        L4
+        L4,
+        CLIMB,
+        CLIMBER_GO_DOWN,
+        CLIMBER_HOLD
     }
 
     public enum CurrentSuperState {
@@ -38,7 +43,10 @@ public class Superstructure extends SubsystemBase {
         L1,
         L2,
         L3,
-        L4
+        L4,
+        CLIMB,
+        CLIMBER_GO_DOWN,
+        CLIMBER_HOLD
     }
 
     WantedSuperState wantedSuperState = WantedSuperState.STOPPED;
@@ -47,9 +55,9 @@ public class Superstructure extends SubsystemBase {
     CurrentSuperState previousSuperState;
 
     public Superstructure(
-            EndEffectorSubsystem endEffector, /*IntakerSubsystem intakerSubsystem, */ElevatorSubsystem elevatorSubsystem) {
+            EndEffectorSubsystem endEffector, /*IntakerSubsystem intakerSubsystem, */ElevatorSubsystem elevatorSubsystem/*,ClimberSubsystem climberSubsystem*/) {
         this.endEffector = endEffector;
-        // this.intakerSubsystem = intakerSubsystem;
+        // this.climberSubsystem = climberSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
     }
 
@@ -98,6 +106,15 @@ public class Superstructure extends SubsystemBase {
             case L4:
                 currentSuperState = CurrentSuperState.L4;
                 break;
+            case CLIMB:
+                currentSuperState = CurrentSuperState.CLIMB;
+                break;
+            case CLIMBER_GO_DOWN:
+                currentSuperState = CurrentSuperState.CLIMBER_GO_DOWN;
+                break;
+            case CLIMBER_HOLD:
+                currentSuperState = CurrentSuperState.CLIMBER_HOLD;
+                break;
             case STOPPED:
                 currentSuperState = CurrentSuperState.STOPPED;
                 break;
@@ -134,6 +151,14 @@ public class Superstructure extends SubsystemBase {
             case L4:
                 l4();
                 break;
+            // case CLIMB:
+            //     climb();
+            //     break;
+            // case CLIMBER_GO_DOWN:
+            //     climberGoDown();
+            // case CLIMBER_HOLD:
+            //     climberHold();
+            //     break;
             case STOPPED:
                 handleStopped();
                 break;
@@ -176,6 +201,16 @@ public class Superstructure extends SubsystemBase {
     private void l4() {
         elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.L4);
     }
+    // private void climberHold() {
+    //     climberSubsystem.setWantedState(ClimberSubsystem.WantedState.HOLD);
+    // }
+    // private void climb() {
+    //     climberSubsystem.setWantedState(ClimberSubsystem.WantedState.CLIMB);
+    // }
+
+    // private void climberGoDown() {
+    //     climberSubsystem.setWantedState(ClimberSubsystem.WantedState.DOWN);
+    // }
 
     private void outtake(){
         // intakerSubsystem.setWantedState(IntakerSubsystem.WantedState.OUTTAKE);
@@ -196,6 +231,7 @@ public class Superstructure extends SubsystemBase {
         // intakerSubsystem.setWantedState(IntakerSubsystem.WantedState.IDLE);
         endEffector.setWantedState(EndEffectorSubsystem.WantedState.IDLE);
         elevatorSubsystem.setWantedState(ElevatorSubsystem.WantedState.BOTTOM);
+        // climberSubsystem.setWantedState(ClimberSubsystem.WantedState.IDLE);
     }
 
 }

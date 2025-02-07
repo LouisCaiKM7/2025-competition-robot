@@ -21,6 +21,8 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.apriltagvision.AprilTagVision;
 import frc.robot.subsystems.apriltagvision.AprilTagVisionIONorthstar;
 import frc.robot.subsystems.beambreak.BeambreakIOReal;
+import frc.robot.subsystems.climber.ClimberIOReal;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.endeffector.EndEffectorIOReal;
@@ -64,9 +66,10 @@ public class RobotContainer {
     Swerve swerve = Swerve.getInstance();
     Display display = Display.getInstance();
     ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(new ElevatorIOReal());
+//     ClimberSubsystem climberSubsystem = new ClimberSubsystem(new ClimberIOReal());
     EndEffectorSubsystem endEffectorSubsystem = new EndEffectorSubsystem(new EndEffectorIOReal(), new BeambreakIOReal(ENDEFFECTOR_MIDDLE_BEAMBREAK_ID), new BeambreakIOReal(ENDEFFECTOR_EDGE_BEAMBREAK_ID));
 //     IntakerSubsystem intakerSubsystem = new IntakerSubsystem(new IntakePivotIOReal(), new IntakerRollerIOReal(), new BeambreakIOReal(INTAKER_BEAMBREAK_ID));
-    Superstructure superstructure =  new Superstructure(endEffectorSubsystem,/*intakerSubsystem,*/elevatorSubsystem);
+    Superstructure superstructure =  new Superstructure(endEffectorSubsystem,/*intakerSubsystem,*/elevatorSubsystem/*,climberSubsystem)*/);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -153,6 +156,12 @@ public class RobotContainer {
                 .onTrue(superstructure.setWantedSuperStateCommand(Superstructure.WantedSuperState.L3));
         new Trigger(controller.y())
                 .onTrue(superstructure.setWantedSuperStateCommand(Superstructure.WantedSuperState.L4));
+        new Trigger(controller.povLeft())
+                .onTrue(superstructure.setWantedSuperStateCommand(Superstructure.WantedSuperState.CLIMB));
+        new Trigger(controller.povRight())
+                .onTrue(superstructure.setWantedSuperStateCommand(Superstructure.WantedSuperState.CLIMBER_GO_DOWN));
+        new Trigger(controller.povUp())
+                .onTrue(superstructure.setWantedSuperStateCommand(Superstructure.WantedSuperState.CLIMBER_HOLD));
     }
 
     /**
