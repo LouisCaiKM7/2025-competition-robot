@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -19,10 +20,9 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.RobotConstants;
 
-public class IntakePivotIOReal implements IntakePivotIO {
-    private final TalonFX motor = new TalonFX(RobotConstants.intakeConstants.INTAKER_PIVOT_MOTOR_ID,
+public class ClimberIOReal implements ClimberIO {
+    private final TalonFX motor = new TalonFX(RobotConstants.ClimberConstants.CLIMBER_MOTOR_ID,
             RobotConstants.CAN_BUS_NAME);
-
     private final StatusSignal<AngularVelocity> velocityRotationsPerSec = motor.getVelocity();
     private final StatusSignal<Voltage> appliedVolts = motor.getSupplyVoltage();
     private final StatusSignal<Current> statorCurrentAmps = motor.getStatorCurrent();
@@ -35,7 +35,7 @@ public class IntakePivotIOReal implements IntakePivotIO {
     private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true);
     private final MotionMagicVoltage motionMagic = new MotionMagicVoltage(0.0).withEnableFOC(true);
 
-    public IntakePivotIOReal() {
+    public ClimberIOReal() {
         var config = new TalonFXConfiguration();
         // TODO check configuration
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -43,7 +43,7 @@ public class IntakePivotIOReal implements IntakePivotIO {
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         config.CurrentLimits.SupplyCurrentLimit = 20.0;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        config.Feedback.SensorToMechanismRatio = RobotConstants.intakeConstants.PIVOT_RATIO;
+        config.Feedback.SensorToMechanismRatio = RobotConstants.ClimberConstants.CLIMBER_RATIO;
 
         motor.getConfigurator().apply(config);
         motor.optimizeBusUtilization();
@@ -59,7 +59,7 @@ public class IntakePivotIOReal implements IntakePivotIO {
     }
 
     @Override
-    public void updateInputs(IntakePivotIOInputs inputs) {
+    public void updateInputs(ClimberIOInputs inputs) {
         BaseStatusSignal.refreshAll(
                 velocityRotationsPerSec,
                 tempCelsius,
@@ -76,14 +76,15 @@ public class IntakePivotIOReal implements IntakePivotIO {
         inputs.position = Rotation2d.fromRotations(motorPositionRotations.getValueAsDouble());
 
         motor.getConfigurator().apply(new Slot0Configs()
-                .withKP(inputs.intakePivotKP)
-                .withKI(inputs.intakePivotKI)
-                .withKD(inputs.intakePivotKD)
-                .withKA(inputs.intakePivotKA)
-                .withKV(inputs.intakePivotKV)
-                .withKS(inputs.intakePivotKS));
-    }
+                .withKP(inputs.ClimberKP)
+                .withKI(inputs.ClimberKI)
+                .withKD(inputs.ClimberKD)
+                .withKA(inputs.ClimberKA)
+                .withKV(inputs.ClimberKV)
+                .withKS(inputs.ClimberKS));
 
+        
+    }
     @Override
     public void setMotorVoltage(double voltage) {
         motor.setControl(voltageOut.withOutput(voltage));
